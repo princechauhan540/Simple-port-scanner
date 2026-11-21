@@ -1,0 +1,13 @@
+{
+  "name": "simple-port-scanner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser GUI for a local TCP connect port scanner.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

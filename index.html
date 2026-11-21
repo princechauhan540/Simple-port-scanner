@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple local TCP port scanner with live results and CSV export.">
+  <title>Port Scanner</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Port Scanner home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>Port Scanner</a>
+    <div class="server-status" id="server-status" role="status"><span class="status-dot" aria-hidden="true"></span><span id="server-label">Connecting to local server</span></div>
+  </header>
+
+  <main>
+    <section class="page-intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">NETWORK UTILITY</p><h1 id="page-title">See which ports are open.</h1><p class="intro-copy">Test TCP connections from your local server and review the results as they arrive.</p></div>
+      <div class="protocol-label"><span class="connection-symbol" aria-hidden="true"></span>TCP connect scan</div>
+    </section>
+
+    <div id="environment-message" class="notice" role="alert" hidden></div>
+
+    <div class="workspace">
+      <section class="panel scan-panel" aria-labelledby="configure-title">
+        <div class="panel-heading"><h2 id="configure-title">Configure scan</h2></div>
+        <form id="scan-form">
+          <div class="field">
+            <label for="host">Target host</label>
+            <input id="host" name="host" type="text" value="127.0.0.1" placeholder="127.0.0.1 or example.com" maxlength="253" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="host-help">
+            <p class="field-help" id="host-help">Enter a hostname or an IP address.</p>
+          </div>
+          <div class="field">
+            <div class="label-row"><label for="ports">Ports</label><span class="field-meta">Up to 256 ports</span></div>
+            <input id="ports" name="ports" type="text" value="22,80,443,3000,3306,5432,6379,8000,8080,8443" placeholder="22,80,443 or 8000-8010" maxlength="2048" required autocomplete="off" spellcheck="false" aria-describedby="ports-help">
+            <p class="field-help" id="ports-help">Separate ports with commas or enter a range.</p>
+            <div class="presets" aria-label="Port presets"><button type="button" class="preset" data-ports="22,80,443,3000,3306,5432,6379,8000,8080,8443">Common ports</button><button type="button" class="preset" data-ports="80,443,3000,5000,8000,8080,8443">Web ports</button></div>
+          </div>
+          <div class="field timeout-field">
+            <label for="timeout">Timeout per port</label>
+            <div class="select-wrap"><select id="timeout" name="timeout"><option value="500">500 ms</option><option value="1000" selected>1 second</option><option value="2000">2 seconds</option><option value="5000">5 seconds</option></select></div>
+          </div>
+          <div class="scan-actions"><button class="button button-primary" id="start-button" type="submit"><span class="scan-icon" aria-hidden="true"></span><span id="start-label">Start scan</span></button><button class="button button-secondary" id="stop-button" type="button" disabled>Stop</button></div>
+        </form>
+      </section>
+
+      <section class="panel overview-panel" aria-labelledby="overview-title">
+        <div class="panel-heading"><h2 id="overview-title">Scan overview</h2><span id="scan-state" class="state-label">Ready</span></div>
+        <div class="progress-content">
+          <div class="progress-caption"><span id="progress-label">Waiting to start</span><strong id="progress-percent">0%</strong></div>
+          <progress id="scan-progress" max="1" value="0" aria-label="Scan progress"></progress>
+          <p id="scan-message" class="scan-message" role="status" aria-live="polite">Choose a target and start a scan.</p>
+        </div>
+        <div class="stats" aria-label="Scan counts">
+          <div class="stat"><span>Checked</span><strong id="checked-count">0</strong></div>
+          <div class="stat"><span><i class="mini-dot open-dot" aria-hidden="true"></i>Open</span><strong id="open-count">0</strong></div>
+          <div class="stat"><span><i class="mini-dot closed-dot" aria-hidden="true"></i>Closed</span><strong id="closed-count">0</strong></div>
+          <div class="stat"><span><i class="mini-dot timeout-dot" aria-hidden="true"></i>Timed out</span><strong id="timeout-count">0</strong></div>
+        </div>
+        <div class="scan-facts"><div><span>Target</span><strong id="scan-target">—</strong></div><div><span>Duration</span><strong id="scan-duration">—</strong></div></div>
+      </section>
+    </div>
+
+    <section class="panel results-panel" aria-labelledby="results-title">
+      <div class="results-heading"><div class="results-title"><h2 id="results-title">Results</h2><span id="result-count" class="result-count">0</span></div><div class="results-tools"><div class="filter-group" role="group" aria-label="Filter scan results"><button id="filter-all" type="button" aria-pressed="true">All ports</button><button id="filter-open" type="button" aria-pressed="false">Open only</button></div><button id="export-button" class="button button-export" type="button" disabled>Export CSV</button></div></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">Port</th><th scope="col">Common service</th><th scope="col">Status</th><th scope="col" class="time-cell">Response time</th></tr></thead><tbody id="results-body"></tbody></table></div>
+      <div class="empty-state" id="empty-state"><div class="empty-port" aria-hidden="true"><i></i><i></i><i></i><i></i></div><h3 id="empty-title">Your results will appear here</h3><p id="empty-copy">Start a scan to check your selected TCP ports.</p></div>
+      <p class="table-note">Service names are based on common port assignments.</p>
+    </section>
+    <footer>Port Scanner <span aria-hidden="true">·</span> Local TCP connection testing</footer>
+  </main>
+</body>
+</html>
